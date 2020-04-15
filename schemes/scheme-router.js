@@ -1,6 +1,7 @@
 const express = require('express');
 
 const Schemes = require('./scheme-model.js');
+const Steps = require('./steps-model.js')
 
 const router = express.Router();
 
@@ -110,5 +111,22 @@ router.delete('/:id', (req, res) => {
     res.status(500).json({ message: 'Failed to delete scheme' });
   });
 });
+
+router.put('/:id/addStep', (req, res) => {
+  const { id } = req.params;
+  const step = req.body;
+
+  Steps.addStep(step, id)
+  .then(newStep => {
+    if (newStep) {
+      res.json({ message: "Step added successfully." });
+    } else {
+      res.status(404).json({ message: "Could not find scheme with given id" });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: "Failed to update step" });
+  });
+})
 
 module.exports = router;
