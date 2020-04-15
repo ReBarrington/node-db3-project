@@ -81,20 +81,17 @@ router.post('/:id/steps', (req, res) => {
 router.put('/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
-
-  Schemes.findById(id)
-  .then(scheme => {
-    if (scheme) {
-      Schemes.update(changes, id)
-      .then(updatedScheme => {
-        res.json(updatedScheme);
-      });
+  
+  Schemes.update(id, changes)
+  .then(updated => {
+    if (updated) {
+      res.json({ data: updated });
     } else {
-      res.status(404).json({ message: 'Could not find scheme with given id' });
+      res.status(404).json({ message: "Could not find scheme with given id" });
     }
   })
-  .catch (err => {
-    res.status(500).json({ message: 'Failed to update scheme' });
+  .catch(err => {
+    res.status(500).json({ message: "Failed to update user" });
   });
 });
 
